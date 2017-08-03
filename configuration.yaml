@@ -1,0 +1,243 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: Home
+  # Location required to calculate the time the sun rises and sets
+  latitude: 55.178749
+  longitude: 37.579749
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: 200
+  # metric for Metric, imperial for Imperial
+  unit_system: metric
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: Europe/Moscow
+  # Custom friendly names
+  customize: !include customize.yaml
+
+# Enables the frontend
+frontend:
+
+# Enables configuration UI
+config:
+
+http:
+  # Uncomment this to add a password (recommended!)
+  api_password: !secret http_password
+  # # Uncomment this if you are using SSL or running in Docker etc
+  # base_url: home.elantria.ru
+  # # server_port: 80
+  # ssl_certificate: /etc/letsencrypt/live/home.elantria.ru/fullchain.pem
+  # ssl_key: /etc/letsencrypt/live/home.elantria.ru/privkey.pem
+
+# Checks for available updates 
+# Note: This component will send some information about your system to
+# the developers to assist with development of Home Assistant.
+# For more information, please see:
+# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+updater:
+#  reporting: False
+
+# Discover some devices automatically
+discovery:
+  ignore:
+    - google_cast
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+# Enables support for tracking state changes over time.
+history:
+  exclude:
+    entities:
+      - sensor.since_last_boot
+    domains:
+      - group
+      - automation
+      - media_player
+
+# View all events in a logbook
+logbook:
+  exclude:
+    entities:
+      - sensor.since_last_boot
+    domains:
+      - group
+
+# DB connection
+recorder:
+  purge_days: 180
+  db_url: mysql://root:752333@127.0.0.1/homeassistant?charset=utf8
+
+# logger:
+#   default: critical
+#   logs:
+#     homeassistant.components.http: warning
+
+# zone:
+#   name: Akhun
+#   latitude: 43.5383797
+#   longitude: 39.8167541
+#   radius: 100
+#   icon: mdi:beach
+
+# Track the sun
+sun:
+
+binary_sensor:
+  - platform: mqtt
+    state_topic: "home/cmnd/PIR/POWER1"
+    name: motion_kitchen
+    qos: 0
+    payload_on: "ON"
+    payload_off: "OFF"
+    device_class: motion
+
+# Weather Prediction
+sensor: !include sensors.yaml
+    
+# Text to speech
+tts:
+  platform: google
+  language: 'ru'
+
+group: !include groups.yaml
+automation old: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+# Mosuitto MQTT broker
+mqtt:
+  broker: 127.0.0.1
+  port: 1883
+  client_id: home-assistant
+
+# MQTT lamp switch
+light:
+  - platform: mqtt
+    name: "Lamp_1"
+    state_topic: "home/stat/relay_1/POWER"
+    command_topic: "home/cmnd/relay_1/POWER"
+    qos: 1
+    payload_on: "ON"
+    payload_off: "OFF"
+    retain: true    
+  - platform: mqtt
+    name: "Lamp_2"
+    state_topic: "home/stat/relay_2/POWER"
+    command_topic: "home/cmnd/relay_2/POWER"
+    qos: 1
+    payload_on: "ON"
+    payload_off: "OFF"
+    retain: true
+  - platform: mqtt
+    name: "Lamp_3"
+    state_topic: "home/stat/relay_3/POWER"
+    command_topic: "home/cmnd/relay_3/POWER"
+    qos: 1
+    payload_on: "ON"
+    payload_off: "OFF"
+    retain: true    
+  # - platform: mqtt_json
+  #   name: RGB
+  #   state_topic: "001AAFF3/light/rgb"
+  #   command_topic: "001AAFF3/light/rgb/set"
+  #   payload_on: '{"state": "ON"}'
+  #   payload_off: '{"state": "OFF"}'
+  #   brightness: true
+  #   rgb: true
+  #   retain: true
+
+# Google Home
+# emulated_hue:
+#   host_ip: 192.168.1.10
+#   listen_port: 80
+
+# Media players
+media_player:
+  # - platform: vlc
+  #   name: raspberry
+  # - platform: philips_js
+  #   host: 192.168.1.76
+  - platform: cast
+    host: 192.168.1.171
+  # - platform: kodi
+  #   name: kodi
+  #   host: 192.168.1.240
+  #   port: 8080
+  #   username: kodi
+  #   password: kodi
+
+# # Sidebar links
+# panel_iframe:
+#   configurator:
+#     title: Config Editor
+#     icon: mdi:wrench
+#     url: http://192.168.1.10:3218
+#   router:
+#     title: Router
+#     icon: mdi:router-wireless
+#     url: 'http://192.168.1.1'
+
+# Presence Detection
+device_tracker:
+  - platform: owntracks
+    max_gps_accuracy: 200
+    consider_home: 240
+    interval_seconds: 30
+
+  - platform: nmap_tracker
+    hosts: 192.168.1.35
+    consider_home: 600
+    interval_seconds: 60
+
+#Switches
+switch:
+  - platform: mqtt
+    name: "Conditioner"
+    state_topic: "home/stat/relay_4/POWER"
+    command_topic: "home/cmnd/relay_4/POWER"
+    qos: 1
+    payload_on: "ON"
+    payload_off: "OFF"
+    retain: true
+
+input_slider:
+  timer:
+    name: conditioner
+    initial: 30
+    min: 10
+    max: 120
+    step: 10
+
+telegram_bot:
+  - platform: polling
+    api_key: !secret telegram_api_key
+    allowed_chat_ids:
+      - 379404547
+
+notify:
+  - name: telegram
+    platform: telegram
+    chat_id: 379404547
+  - name: push
+    platform: html5
+    gcm_api_key: !secret gcm_api_key
+    gcm_sender_id: !secret gcm_sender_id
+
+alarm_control_panel:
+  - platform: manual
+    code: !secret alarm_code
+
+climate:
+  - platform: generic_thermostat
+    name: Thermostat
+    heater: switch.conditioner
+    target_sensor: sensor.dht_sensor_temperature
+    min_temp: 15
+    max_temp: 28
+    target_temp: 24
+    ac_mode: on
+    tolerance: 0.5
+    min_cycle_duration:
+      minutes: 10
+    # keep_alive:
+    #   minutes: 5

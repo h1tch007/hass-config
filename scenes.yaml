@@ -1,0 +1,14 @@
+- name: Bedroom normal
+  entities:
+    light.rgb:
+      state: on
+#      transition: 2
+      brightness: 64
+      rgb_color: [255, 191, 47]
+- name: Bedroom dim
+  entities:
+    light.rgb:
+      state: on
+#      transition: 2
+      brightness: 16
+      rgb_color: [0, 255, 128]

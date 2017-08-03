@@ -1,0 +1,103 @@
+default_view:
+  view: true
+  name: "Информация"
+  entities:
+  - device_tracker.oneplus_a0001
+  - group.climate
+  - group.home_temp
+  - group.light_all
+bedroom:
+  view: true
+  name: "Спальня"
+  entities:
+  - group.light_bedroom
+  - group.conditioner
+kitchen:
+  view: true
+  name: "Кухня"
+  entities:
+  - light.lamp_3
+system:
+  view: true
+  name: "Система"
+  entities:
+  - group.monitor
+  - group.automation
+debug:
+  view: true
+  name: Debug
+  entities:
+  # - media_player.raspberry
+  # - media_player.kodi
+  # - media_player.philips_tv
+  - media_player.mibox3
+climate:
+  view: false
+  name: "Погода"
+  entities:
+  - sensor.owm_condition
+  - sensor.owm_temperature
+  - sensor.owm_humidity
+  - sensor.owm_wind_speed
+  - sensor.owm_pressure
+monitor:
+  view: false
+  name: "Производительность"
+  entities:
+  - sensor.cpu_temp
+  - sensor.cpu_use
+  - sensor.ram_use
+  - sensor.disk_use_
+  - sensor.since_last_boot
+  - sensor.hass_update_available
+light_bedroom:
+  view: false
+  name: "Свет"
+  entities:
+  # - light.rgb
+  - light.lamp_1
+  - light.lamp_2
+light_bedroom_list:
+  view: false
+  name: "Спальня"
+  icon: mdi:flash
+  entities:
+  # - light.rgb
+  - light.lamp_1
+  - light.lamp_2
+  - group.conditioner
+light_all:
+  view: false
+  name: "Свет"
+  entities:
+  - group.light_bedroom_list
+home_temp:
+  view: false
+  name: "Дома"
+  entities:
+  - sensor.dht_sensor_temperature
+  - sensor.dht_sensor_humidity
+  - alarm_control_panel.ha_alarm
+conditioner:
+  control: hidden
+  view: false
+  name: "Климат-контроль"
+  icon: mdi:snowflake
+  entities:
+  - switch.conditioner
+  - group.conditioner_timer
+  - climate.thermostat
+conditioner_timer:
+  control: hidden
+  view: false
+  name: "Автоматическое откючение"
+  icon: mdi:timer
+  entities:
+  - script.conditioner_timer
+  - input_slider.timer
+automation:
+  view: false
+  name: "Автоматизация"
+  entities:
+  - automation.turn_on_kitchen_light
+  - automation.turn_off_kitchen_light

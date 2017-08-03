@@ -1,0 +1,102 @@
+# Add an entry for each entity that you want to overwrite.
+# friendly_name  - Name of the entity
+# hidden  - Set to true to hide the entity.
+# entity_picture  - Url to use as picture for entity
+# icon  - Any icon from MaterialDesignIcons.com. Prefix name with mdi:, ie mdi:home.
+# assumed_state - For switches with an assumed state two buttons are shown (turn off, turn on) instead of a switch. By setting assumed_state to false you will get the default switch icon.
+# device_class  - Sets the class of the device, changing the device state and icon that is displayed on the UI (see below).
+climate.thermostat:
+  friendly_name: Термостат
+
+alarm_control_panel.ha_alarm:
+  friendly_name: Сигнализация
+
+sensor.installed_hass_version:
+  friendly_name: Текущая версия
+
+sensor.current_hass_version:
+  friendly_name: Доступная версия
+
+sensor.hass_update_available:
+  friendly_name: Доступно обновление
+  icon: mdi:cloud-check
+
+sensor.cpu_temp:
+  friendly_name: Температура процессора
+
+sensor.sea_temp:
+  friendly_name: Температура воды в море
+  icon: mdi:waves
+
+sensor.owm_condition:
+  friendly_name: Состояние
+  icon: mdi:information-outline
+
+sensor.owm_humidity:
+  friendly_name: Влажность
+  icon: mdi:water-percent
+
+sensor.owm_pressure:
+  friendly_name: Давление
+  icon: mdi:thermometer
+  
+sensor.owm_rain:
+  friendly_name: Осадки
+  icon: mdi:weather-pouring
+
+sensor.owm_temperature:
+  friendly_name: Температура
+  icon: mdi:thermometer-lines
+
+sensor.owm_wind_speed:
+  friendly_name: Ветер
+  icon: mdi:weather-windy
+
+sensor.disk_use_:
+  friendly_name: Использование диска
+
+sensor.ram_use:
+  friendly_name: Использование памяти
+
+sensor.since_last_boot:
+  friendly_name: Время работы
+  icon: mdi:clock
+
+sensor.cpu_use:
+  friendly_name: Использование процессора
+
+light.lamp_1:
+  friendly_name: Лампа
+
+light.lamp_2:
+  friendly_name: Лампа
+
+light.lamp_3:
+  friendly_name: Подсветка
+
+device_tracker.oneplus_a0001:
+  friendly_name: Илья
+
+sensor.dht_sensor_humidity:
+  friendly_name: Влажность
+  icon: mdi:water-percent
+
+sensor.dht_sensor_temperature:
+  friendly_name: Температура
+  icon: mdi:thermometer-lines
+
+switch.conditioner:
+  friendly_name: Кондиционер
+  icon: mdi:air-conditioner
+
+automation.turn_on_kitchen_light:
+  friendly_name: Автоматическое включение подсветки на кухне
+
+automation.turn_off_kitchen_light:
+  friendly_name: Автоматическое отключение света на кухне
+
+script.conditioner_timer:
+  friendly_name: Таймер
+
+input_slider.timer:
+  friendly_name: Время

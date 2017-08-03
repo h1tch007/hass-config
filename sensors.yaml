@@ -1,0 +1,50 @@
+- platform: openweathermap
+  api_key: !secret owm_api
+  forecast: 1
+  language: ru
+  monitored_conditions:
+    - weather
+    - temperature
+    - humidity
+    - pressure
+    - wind_speed
+- platform: systemmonitor
+  resources:
+    - type: processor_use
+    - type: disk_use_percent
+      arg: /
+    - type: memory_use_percent
+    - type: since_last_boot
+- platform: command_line
+  name: cpu_temp
+  command: "cat /sys/class/thermal/thermal_zone0/temp"
+  unit_of_measurement: "°C"
+  value_template: '{{ value | multiply(0.001) }}'
+# - platform: command_line
+#   name: sea_temp
+#   command: curl -s https://pogoda.turtella.ru/Russia/Sochi/sea_temperature/ | grep -oP '(?<=<div class="seaTemp">).*?(?=<font)'
+#   unit_of_measurement: "°C"
+- platform: mqtt
+  state_topic: "home/DHT22/Temperature"
+  name: dht_sensor_temperature
+  unit_of_measurement: "°C"
+- platform: mqtt
+  state_topic: "home/DHT22/Humidity"
+  name: dht_sensor_humidity
+  unit_of_measurement: "%"
+- platform: command_line
+  command: "/srv/homeassistant/bin/hass --version"
+  name: Installed HASS Version
+- platform: command_line
+  command: python -c "import requests; print(requests.get('https://pypi.python.org/pypi/homeassistant/json').json()['info']['version'])"
+  name: Current HASS Version
+- platform: template
+  sensors:
+    hass_update_available:
+      value_template: >-
+        {%- if states.sensor.current_hass_version.state != states.sensor.installed_hass_version.state -%}
+           {{ states.sensor.current_hass_version.state }}
+        {%- else -%}
+           Нет
+        {%- endif -%}
+        

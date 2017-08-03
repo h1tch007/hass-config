@@ -1,0 +1,22 @@
+conditioner_timer:
+    sequence:
+    - service: switch.turn_on
+      data:
+        entity_id: switch.conditioner
+    - delay: '00:{{ states.input_slider.timer.state | int }}:00'
+    - service: switch.turn_off
+      data:
+        entity_id: switch.conditioner
+
+alarm_trigger:
+    sequence:
+    - service: notify.push
+      data:
+        message: "Внимение! Сработала охранная сигнализация."
+        data:
+          actions:
+          - action: camera_shot
+            title: "Камера"
+    - service: notify.telegram
+      data:
+        message: "Внимение! Сработала охранная сигнализация."

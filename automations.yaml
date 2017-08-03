@@ -1,0 +1,133 @@
+- alias: 'HTML5 push notification action button clicked'
+  trigger:
+    platform: event
+    event_type: html5_notification.clicked
+    event_data:
+     action: camera_shot
+  action:
+    - service: light.turn_off
+
+- alias: 'Turn on kitchen light'
+  # initial_state: 'off'
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.motion_kitchen
+      to: 'on'
+  condition:
+    - condition: sun
+      after: sunset
+      after_offset: "-6:00:00"
+  action:
+    - service: light.turn_on
+      entity_id: light.lamp_3
+
+- alias: 'Turn off kitchen light'
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.motion_kitchen
+      to: 'off'
+      for:
+        minutes: 3
+  action:
+    - service: homeassistant.turn_off
+      entity_id: group.kitchen
+
+- alias: 'Update notifications'
+  trigger:
+    - platform: state
+      entity_id: sensor.hass_update_available
+      from: 'Нет'
+  action:
+    service: notify.telegram
+    data:
+      title: 'Обновление Home Assistant'
+      message: "Версия {{states('sensor.current_hass_version')}} доступна для установки."
+
+- alias: 'Telegram bot version check'
+  hide_entity: true
+  trigger:
+    platform: event
+    event_type: telegram_command
+    event_data:
+      command: '/version'
+  action:
+    - service: notify.telegram
+      data:
+        message: "Текущая версия Home Assistant - {{states('sensor.installed_hass_version')}}."
+
+# - alias: 'Alarm trigger'
+#   hide_entity: true
+#   trigger:
+#     - platform: state
+#       entity_id: sensor.hass_update_available
+#       from: 'Нет'
+#     sequence:
+#     # - service: notify.push
+#     #   data:
+#     #     message: "Внимение! Сработала охранная сигнализация."
+#     #     data:
+#     #       actions:
+#     #         action: "Камера"
+#     - service: notify.telegram
+#       data:
+#         message: "Внимение! Сработала охранная сигнализация."
+
+# - alias: "Media player stopped/paused"
+#   trigger:
+#     - platform: state
+#       entity_id: media_player.kodi
+#       from: 'playing'
+#       to: 'idle'
+#     - platform: state
+#       entity_id: media_player.kodi
+#       from: 'playing'
+#       to: 'paused'
+#   condition:
+#     - condition: state
+#       entity_id: sun.sun
+#       state: 'below_horizon'
+#   action:
+#       service: scene.turn_on
+#       entity_id: scene.bedroom_normal
+
+# - alias: "Media player playing"
+#   trigger:
+#     - platform: state
+#       entity_id: media_player.kodi
+#       to: 'playing'
+#   condition:
+#     - condition: state
+#       entity_id: sun.sun
+#       state: 'below_horizon'
+#   action:
+#       service: scene.turn_on
+#       entity_id: scene.bedroom_dim
+
+# - alias: "Turn on bedroom light when PIR is on"
+#   trigger:
+#     - platform: state
+#       entity_id: binary_sensor.motion
+#       to: 'on'
+#   condition:
+#     - condition: state
+#       entity_id: sun.sun
+#       state: 'below_horizon'
+#     - condition: time
+#       after: '15:00:00'
+#       before: '23:00:00'
+#   action:
+#       service: homeassistant.turn_on
+#       entity_id: group.all_lights
+
+# - alias: "Turn off bedroom light when PIR is off"
+#   trigger:
+#     - platform: state
+#       entity_id: binary_sensor.motion
+#       to: 'off'
+#   condition:
+#     - condition: state
+#       entity_id: group.all_lights
+#       state: 'on'
+#   action:
+#       service: homeassistant.turn_off
+#       entity_id: group.all_lights
