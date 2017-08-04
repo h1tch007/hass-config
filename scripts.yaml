@@ -17,6 +17,6 @@ alarm_trigger:
           actions:
           - action: camera_shot
             title: "Камера"
-    - service: notify.telegram
-      data:
-        message: "Внимение! Сработала охранная сигнализация."
+    # - service: notify.telegram
+    #   data:
+    #     message: "Внимение! Сработала охранная сигнализация."
