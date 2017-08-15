@@ -19,7 +19,7 @@
   name: cpu_temp
   command: "cat /sys/class/thermal/thermal_zone0/temp"
   unit_of_measurement: "°C"
-  value_template: '{{ value | multiply(0.001) }}'
+  value_template: '{{ value | multiply(0.001) | round(1) }}'
 # - platform: command_line
 #   name: sea_temp
 #   command: curl -s https://pogoda.turtella.ru/Russia/Sochi/sea_temperature/ | grep -oP '(?<=<div class="seaTemp">).*?(?=<font)'
