@@ -25,11 +25,11 @@
 #   command: curl -s https://pogoda.turtella.ru/Russia/Sochi/sea_temperature/ | grep -oP '(?<=<div class="seaTemp">).*?(?=<font)'
 #   unit_of_measurement: "°C"
 - platform: mqtt
-  state_topic: "home/DHT22/Temperature"
+  state_topic: "home/DHTtoMQTT/dht1/temp"
   name: dht_sensor_temperature
   unit_of_measurement: "°C"
 - platform: mqtt
-  state_topic: "home/DHT22/Humidity"
+  state_topic: "home/DHTtoMQTT/dht1/hum"
   name: dht_sensor_humidity
   unit_of_measurement: "%"
 - platform: command_line

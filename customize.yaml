@@ -65,14 +65,15 @@ sensor.since_last_boot:
 sensor.cpu_use:
   friendly_name: Использование процессора
 
-light.lamp_1:
+light.bedroom_light:
+  friendly_name: Свет
+  assumed_state: false
+
+light.bedroom_lamp_1:
   friendly_name: Лампа
 
-light.lamp_2:
+light.bedroom_lamp_2:
   friendly_name: Лампа
-
-light.lamp_3:
-  friendly_name: Подсветка
 
 device_tracker.oneplus_a0001:
   friendly_name: Илья

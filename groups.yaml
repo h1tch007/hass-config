@@ -29,7 +29,7 @@ debug:
   entities:
   # - media_player.raspberry
   # - media_player.kodi
-  # - media_player.philips_tv
+  - media_player.philips_tv
   - media_player.mibox3
 climate:
   view: false
@@ -55,14 +55,16 @@ light_bedroom:
   name: "Свет"
   entities:
   # - light.rgb
-  - light.lamp_1
-  - light.lamp_2
+  - light.bedroom_light
+  - light.bedroom_lamp_1
+  - light.bedroom_lamp_2
 light_bedroom_list:
   view: false
   name: "Спальня"
   icon: mdi:flash
   entities:
   # - light.rgb
+  - light.bedroom_light
   - light.lamp_1
   - light.lamp_2
   - group.conditioner
