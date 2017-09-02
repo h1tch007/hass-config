@@ -129,6 +129,14 @@ light:
     payload_off: "OFF"
     retain: true
   - platform: mqtt
+    name: "kitchen_lamp_1"
+    state_topic: "home/stat/relay_3/POWER"
+    command_topic: "home/cmnd/relay_3/POWER"
+    qos: 1
+    payload_on: "ON"
+    payload_off: "OFF"
+    retain: true
+  - platform: mqtt
     name: "bedroom_light"
     command_topic: "home/commands/MQTTto433"
     qos: 1
@@ -158,12 +166,12 @@ media_player:
     host: 192.168.1.116
   - platform: cast
     host: 192.168.1.171
-  # - platform: kodi
-  #   name: kodi
-  #   host: 192.168.1.240
-  #   port: 8080
-  #   username: kodi
-  #   password: kodi
+  - platform: kodi
+    name: kodi
+    host: 192.168.1.10
+    port: 8080
+    username: kodi
+    password: kodi
 
 # # Sidebar links
 # panel_iframe:

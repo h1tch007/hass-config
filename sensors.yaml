@@ -28,10 +28,12 @@
   state_topic: "home/DHTtoMQTT/dht1/temp"
   name: dht_sensor_temperature
   unit_of_measurement: "°C"
+  value_template: '{{ value | round(2) }}'
 - platform: mqtt
   state_topic: "home/DHTtoMQTT/dht1/hum"
   name: dht_sensor_humidity
   unit_of_measurement: "%"
+  value_template: '{{ value | round(2) }}'
 - platform: command_line
   command: "/srv/homeassistant/bin/hass --version"
   name: Installed HASS Version

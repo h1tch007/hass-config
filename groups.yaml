@@ -12,11 +12,13 @@ bedroom:
   entities:
   - group.light_bedroom
   - group.conditioner
+  - media_player.philips_tv
 kitchen:
   view: true
   name: "Кухня"
   entities:
-  - light.lamp_3
+  - light.kitchen_lamp_1
+  - media_player.kodi
 system:
   view: true
   name: "Система"
@@ -28,7 +30,7 @@ debug:
   name: Debug
   entities:
   # - media_player.raspberry
-  # - media_player.kodi
+  - media_player.kodi
   - media_player.philips_tv
   - media_player.mibox3
 climate:
@@ -65,8 +67,8 @@ light_bedroom_list:
   entities:
   # - light.rgb
   - light.bedroom_light
-  - light.lamp_1
-  - light.lamp_2
+  - light.bedroom_lamp_1
+  - light.bedroom_lamp_2
   - group.conditioner
 light_all:
   view: false

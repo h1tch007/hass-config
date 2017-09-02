@@ -75,6 +75,9 @@ light.bedroom_lamp_1:
 light.bedroom_lamp_2:
   friendly_name: Лампа
 
+light.kitchen_lamp_1:
+  friendly_name: Подсветка
+
 device_tracker.oneplus_a0001:
   friendly_name: Илья
 
