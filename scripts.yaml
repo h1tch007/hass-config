@@ -8,15 +8,29 @@ conditioner_timer:
       data:
         entity_id: switch.conditioner
 
-alarm_trigger:
+coffee:
     sequence:
-    - service: notify.push
+    - service_template: >
+        {% if is_state('binary_sensor.coffee_water_level', 'off') %}
+          notify.push
+        {% endif %}
       data:
-        message: "Внимение! Сработала охранная сигнализация."
-        data:
-          actions:
-          - action: camera_shot
-            title: "Камера"
-    # - service: notify.telegram
-    #   data:
-    #     message: "Внимение! Сработала охранная сигнализация."
+        message: "Недостаточно воды в кофеварке."
+    - condition: state
+      entity_id: binary_sensor.coffee_water_level
+      state: 'on'
+    - service: switch.turn_on
+      data:
+        entity_id: switch.coffee_power
+    - delay: 00:02:00
+    - service: switch.turn_on
+      data:
+        entity_id: switch.coffee_water
+    - delay: 00:00:10
+    - service: switch.turn_off
+      data:
+        entity_id: switch.coffee_water
+    - delay: 00:00:03
+    - service: switch.turn_off
+      data:
+        entity_id: switch.coffee_power

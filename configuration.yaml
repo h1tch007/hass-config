@@ -2,8 +2,8 @@ homeassistant:
   # Name of the location where Home Assistant is running
   name: Home
   # Location required to calculate the time the sun rises and sets
-  latitude: 55.178749
-  longitude: 37.579749
+  latitude: !secret latitude
+  longitude: !secret longitude
   # Impacts weather/sunrise data (altitude above sea level in meters)
   elevation: 200
   # metric for Metric, imperial for Imperial
@@ -20,21 +20,9 @@ frontend:
 config:
 
 http:
-  # Uncomment this to add a password (recommended!)
   api_password: !secret http_password
-  # # Uncomment this if you are using SSL or running in Docker etc
-  # base_url: home.elantria.ru
-  # # server_port: 80
-  # ssl_certificate: /etc/letsencrypt/live/home.elantria.ru/fullchain.pem
-  # ssl_key: /etc/letsencrypt/live/home.elantria.ru/privkey.pem
-
-# Checks for available updates 
-# Note: This component will send some information about your system to
-# the developers to assist with development of Home Assistant.
-# For more information, please see:
-# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+  
 updater:
-#  reporting: False
 
 # Discover some devices automatically
 discovery:
@@ -90,6 +78,12 @@ binary_sensor:
     payload_on: "ON"
     payload_off: "OFF"
     device_class: motion
+  - platform: mqtt
+    state_topic: "home/stat/coffee_water_level"
+    name: coffee_water_level
+    qos: 0
+    payload_on: 1
+    payload_off: 0
 
 # Weather Prediction
 sensor: !include sensors.yaml
@@ -153,15 +147,8 @@ light:
   #   rgb: true
   #   retain: true
 
-# Google Home
-# emulated_hue:
-#   host_ip: 192.168.1.10
-#   listen_port: 80
-
 # Media players
 media_player:
-  # - platform: vlc
-  #   name: raspberry
   - platform: philips_js
     host: 192.168.1.116
   - platform: cast
@@ -173,28 +160,19 @@ media_player:
     username: kodi
     password: kodi
 
-# # Sidebar links
-# panel_iframe:
-#   configurator:
-#     title: Config Editor
-#     icon: mdi:wrench
-#     url: http://192.168.1.10:3218
-#   router:
-#     title: Router
-#     icon: mdi:router-wireless
-#     url: 'http://192.168.1.1'
-
 # Presence Detection
 device_tracker:
   - platform: owntracks
     max_gps_accuracy: 200
-    consider_home: 240
+    consider_home: 300
     interval_seconds: 30
 
   - platform: nmap_tracker
     hosts: 192.168.1.35
-    consider_home: 600
-    interval_seconds: 60
+    consider_home: 300
+    interval_seconds: 12
+
+  # - platform: bluetooth_tracker
 
 #Switches
 switch:
@@ -205,6 +183,20 @@ switch:
     qos: 1
     payload_on: "ON"
     payload_off: "OFF"
+    retain: true
+  - platform: mqtt
+    name: coffee_power
+    state_topic: "home/stat/coffee_power"
+    command_topic: "home/cmnd/coffee_power"
+    payload_on: "1"
+    payload_off: "0"
+    retain: true
+  - platform: mqtt
+    name: coffee_water
+    state_topic: "home/stat/coffee_water"
+    command_topic: "home/cmnd/coffee_water"
+    payload_on: "1"
+    payload_off: "0"
     retain: true
 
 input_slider:
@@ -229,10 +221,6 @@ notify:
     platform: html5
     gcm_api_key: !secret gcm_api_key
     gcm_sender_id: !secret gcm_sender_id
-  # - name: sms
-  #   platform: message_bird
-  #   # sender: HomeAssistant
-  #   api_key: QVsfB2VZ4uRJ0LyAjywve70zg
 
 alarm_control_panel:
   - platform: manual

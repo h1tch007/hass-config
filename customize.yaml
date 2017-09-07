@@ -28,6 +28,10 @@ sensor.sea_temp:
   friendly_name: Температура воды в море
   icon: mdi:waves
 
+sensor.ssl_certificate_expiry:
+  friendly_name: Срок действия SSL
+  icon: mdi:certificate
+
 sensor.owm_condition:
   friendly_name: Состояние
   icon: mdi:information-outline

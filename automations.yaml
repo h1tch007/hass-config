@@ -1,11 +1,54 @@
+- alias: 'Coffee low water'
+  trigger:
+    platform: state
+    entity_id: script.coffee
+    to: 'on'
+  condition:
+    - condition: state
+      entity_id: binary_sensor.coffee_water_level
+      state: 'off'
+  action:
+    - service: notify.push
+      data:
+        message: "Недостаточно воды в кофеварке."
+
+- alias: 'Alarm trigger'
+  trigger:
+    platform: state
+    entity_id: binary_sensor.motion_kitchen
+    to: 'on'
+  condition:
+    - condition: state
+      entity_id: group.all_devices
+      state: 'not_home'
+    - condition: state
+      entity_id: alarm_control_panel.ha_alarm
+      state: 'armed_away'
+  action:
+    - service: alarm_control_panel.alarm_trigger
+      entity_id: alarm_control_panel.ha_alarm
+    - service: notify.push
+      data:
+        message: "Уведомление системы безопасности. Сработала сигнализация."
+        data:
+          actions:
+          - action: alarm_disable
+            title: "Отключить"
+    - service: notify.telegram
+      data:
+        message: "Уведомление системы безопасности. Сработала сигнализация."
+
 - alias: 'HTML5 push notification action button clicked'
   trigger:
     platform: event
     event_type: html5_notification.clicked
     event_data:
-     action: camera_shot
+     action: alarm_disable
   action:
-    - service: light.turn_off
+    - service: alarm_control_panel.alarm_disarm
+      data:
+        entity_id: alarm_control_panel.ha_alarm
+        code: !secret alarm_code
 
 - alias: 'Turn on kitchen light'
   # initial_state: 'off'
@@ -42,6 +85,17 @@
     data:
       title: 'Обновление Home Assistant'
       message: "Версия {{states('sensor.current_hass_version')}} доступна для установки."
+
+- alias: 'Hot CPU'
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.cpu_temp
+      above: 60
+  action:
+    service: notify.telegram
+    data:
+      title: 'Перегрев'
+      message: "Температура процессора {{states('sensor.cpu_temp')}}°C."
 
 - alias: 'Telegram bot version check'
   hide_entity: true
